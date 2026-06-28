@@ -40,7 +40,7 @@ import requests
 
 logger = logging.getLogger(__name__)
 
-FEED_BASE = "https://api-endpoint.mta.info/Dataservice/mtagtfsfeeds/nyct%2F"
+FEED_BASE = "https://cdn.mbta.com/realtime"
 
 # route_id (as it appears in TripUpdate.trip.route_id) -> feed suffix
 # Verified against https://github.com/nolanbconaway/underground and
