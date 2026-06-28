@@ -1,0 +1,60 @@
+# Render Blueprint — deploys the FastAPI backend (which also runs the
+# ingest scheduler in-process) plus a free-tier Postgres instance.
+#
+# Usage: push this repo to GitHub, then in Render dashboard choose
+# "New > Blueprint" and point it at the repo. Render reads this file
+# automatically.
+#
+# IMPORTANT — verified free-tier constraints as of mid-2026, READ BEFORE
+# DEPLOYING:
+#   - Free Postgres databases expire 30 days after creation and are
+#     limited to 1GB storage. At ~6 routes x 1 row/30s, that's roughly
+#     250k rows/month — comfortably under 1GB, but you WILL need to
+#     either upgrade the DB or re-create it before day 30 if you want
+#     this running long-term. Render emails a warning beforehand.
+#   - Free web services have an EPHEMERAL filesystem — any local SQLite
+#     file is wiped on every restart/redeploy/spin-down. This is why
+#     this blueprint wires DATABASE_URL to the Postgres instance rather
+#     than letting the app fall back to its SQLite default; if you skip
+#     the database block below, you'll silently lose all history on the
+#     next deploy.
+#   - Free web services spin down after 15 minutes of inactivity and
+#     take ~30-60s to cold-start on the next request. That means the
+#     scheduler stops polling while spun down, and the live dashboard
+#     will show a gap in history during any quiet period. A free
+#     external uptime pinger (e.g. cron-job.org hitting /api/health
+#     every 10 min) keeps it warm if you want continuous polling.
+#   - Free instances also do NOT support Background Worker or Cron Job
+#     service types — only Web Service, Postgres, and Key Value. That's
+#     the other reason ingest runs inside the web service process via
+#     APScheduler rather than as a separate Render worker.
+#
+# Why one service instead of separate web + worker services even setting
+# the above aside: the ingest scheduler (APScheduler) runs inside the
+# same FastAPI process via the lifespan hook in api/main.py. Colocating
+# is the right call architecturally too — see storage/db.py's note on
+# SQLite's single-writer model for why two independent processes
+# writing the same store is something to avoid even if it were free.
+
+services:
+  - type: web
+    name: transit-anomaly-api
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn api.main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: transit-anomaly-db
+          property: connectionString
+      - key: POLL_INTERVAL_SECONDS
+        value: "30"
+      - key: PYTHON_VERSION
+        value: "3.11.9"
+
+databases:
+  - name: transit-anomaly-db
+    plan: free
+    databaseName: transit_anomaly
+    user: transit_anomaly

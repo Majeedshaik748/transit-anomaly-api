@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>HEADWAY — live anomaly console</title>
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="console">
+
+    <header class="console__header">
+      <div class="header__brand">
+        <span class="brand__mark">◉</span>
+        <span class="brand__name">HEADWAY</span>
+        <span class="brand__tag">live anomaly console</span>
+      </div>
+      <div class="header__status">
+        <span class="status__dot" id="conn-dot"></span>
+        <span id="conn-label">connecting…</span>
+        <span class="header__divider">·</span>
+        <span id="clock">--:--:--</span>
+        <span class="header__divider">·</span>
+        <span>NYC SUBWAY GTFS-RT</span>
+      </div>
+    </header>
+
+    <div class="console__body">
+
+      <aside class="rail" id="route-rail">
+        <div class="rail__label">ROUTES</div>
+        <!-- route buttons injected by app.js -->
+      </aside>
+
+      <main class="main">
+        <section class="vitals" id="vitals-strip">
+          <!-- one vitals card per route, injected by app.js -->
+        </section>
+
+        <section class="chart-panel">
+          <div class="chart-panel__head">
+            <h2 id="chart-title">SELECT A ROUTE</h2>
+            <div class="chart-panel__legend">
+              <span class="legend__item"><i class="legend__swatch legend__swatch--line"></i>headway (s)</span>
+              <span class="legend__item"><i class="legend__swatch legend__swatch--band"></i>expected range</span>
+              <span class="legend__item"><i class="legend__swatch legend__swatch--dot"></i>anomaly</span>
+            </div>
+          </div>
+          <svg id="chart" viewBox="0 0 1000 360" preserveAspectRatio="none"></svg>
+        </section>
+
+        <section class="log-panel">
+          <div class="log-panel__head">
+            <h2>ANOMALY LOG</h2>
+            <span id="log-count">0 flagged</span>
+          </div>
+          <div class="log-list" id="log-list">
+            <div class="log-empty">No anomalies yet. The console will populate as the feed runs.</div>
+          </div>
+        </section>
+      </main>
+
+    </div>
+
+    <footer class="console__footer">
+      <span>headway gap = seconds between the two soonest predicted arrivals on a route, per GTFS-RT TripUpdate · polled every 30s · z ≥ 3.0 flags an anomaly</span>
+    </footer>
+
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
