@@ -1,3 +1,4 @@
+
 """
 Pull the MTA NYC Subway GTFS-realtime feed and turn it into a single
 number per monitored route: the current headway gap, in seconds.
@@ -166,3 +167,7 @@ def poll_all_feeds() -> list[HeadwayObservation]:
         except Exception:
             logger.exception("unexpected error parsing feed %s", feed_suffix)
     return all_observations
+×
+grep -n "requests.get" ingest/fetch_feed.py
+
+
