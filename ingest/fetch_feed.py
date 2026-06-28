@@ -49,12 +49,9 @@ FEED_BASE = "https://cdn.mbta.com/realtime"
 # those libraries' READMEs (and api.mta.info) are the source of truth
 # to re-check against.
 MONITORED_FEEDS = {
-    "1": "gtfs",
-    "4": "gtfs",
-    "6": "gtfs",
-    "L": "gtfs-l",
-    "G": "gtfs-g",
-    "N": "gtfs-nqrw",
+    "Red": "TripUpdates.pb",
+    "Orange": "TripUpdates.pb",
+    "Blue": "TripUpdates.pb",
 }
 
 REQUEST_TIMEOUT_SECONDS = 15
