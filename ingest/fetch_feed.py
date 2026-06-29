@@ -40,7 +40,7 @@ import requests
 
 logger = logging.getLogger(__name__)
 
-FEED_BASE = "https://cdn.mbta.com/realtime" 
+FEED_BASE = "https://api-endpoint.mta.info/Dataservice/mtagtfsfeeds/nyct%2F"
 
 # route_id (as it appears in TripUpdate.trip.route_id) -> feed suffix
 # Verified against https://github.com/nolanbconaway/underground and
@@ -49,9 +49,12 @@ FEED_BASE = "https://cdn.mbta.com/realtime"
 # those libraries' READMEs (and api.mta.info) are the source of truth
 # to re-check against.
 MONITORED_FEEDS = {
-    "Red": "TripUpdates.pb",
-    "Orange": "TripUpdates.pb",
-    "Blue": "TripUpdates.pb",
+    "1": "gtfs",
+    "4": "gtfs",
+    "6": "gtfs",
+    "L": "gtfs-l",
+    "G": "gtfs-g",
+    "N": "gtfs-nqrw",
 }
 
 REQUEST_TIMEOUT_SECONDS = 15
@@ -66,7 +69,7 @@ class HeadwayObservation:
 
 
 def _feed_url(feed_suffix: str) -> str:
-    return f"{FEED_BASE}/{feed_suffix}"
+    return f"{FEED_BASE}{feed_suffix}"
 
 
 def _fetch_feed_bytes(feed_suffix: str) -> bytes:
