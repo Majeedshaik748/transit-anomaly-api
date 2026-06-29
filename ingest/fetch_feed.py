@@ -129,15 +129,18 @@ def compute_headways_for_feed(feed_suffix: str, route_ids: list[str]) -> list[He
     upcoming: dict[str, list[int]] = {r: [] for r in route_ids}
 
     for entity in feed.entity:
-        if not entity.HasField("trip_update"):
-            continue
-        tu = entity.trip_update
-        route_id = tu.trip.route_id
-        if route_id not in upcoming:
-            continue
-        epoch = _next_arrival_epoch(tu)
-        if epoch is not None:
-            upcoming[route_id].append(epoch)
+    if not entity.HasField("trip_update"):
+        continue
+
+    tu = entity.trip_update
+    route_id = tu.trip.route_id
+
+    if route_id not in upcoming:
+        continue
+
+    epoch = _next_arrival_epoch(tu)
+    if epoch is not None:
+        upcoming[route_id].append(epoch)
 
     observations: list[HeadwayObservation] = []
     for route_id, epochs in upcoming.items():
