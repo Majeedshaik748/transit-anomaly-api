@@ -128,7 +128,7 @@ def compute_headways_for_feed(feed_suffix: str, route_ids: list[str]) -> list[He
     # route_id -> list of next-arrival epochs across active trips
     upcoming: dict[str, list[int]] = {r: [] for r in route_ids}
     for entity in feed.entity:
-    if not entity.HasField("trip_update"):
+        if not entity.HasField("trip_update"):
         continue
 
     tu = entity.trip_update
