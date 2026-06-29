@@ -10,8 +10,8 @@
 */
 
 const params = new URLSearchParams(location.search);
-const API_BASE = params.get('api') || '';
-const WS_URL = (API_BASE || location.origin).replace(/^http/, 'ws') + '/ws/live';
+const API_BASE = params.get("api") || "https://transit-anomaly-api.onrender.com";
+const WS_URL = "wss://transit-anomaly-api.onrender.com/ws/live";
 
 const ROUTE_COLORS = {
   '1': '#EE352E', '4': '#00933C', '6': '#00933C',
