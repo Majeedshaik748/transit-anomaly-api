@@ -310,3 +310,17 @@ function computeBand(values, window = 15, k = 2) {
 }
 
 window.addEventListener('resize', () => { if (activeRoute) renderChart(); });
+
+// Initialize OpenStreetMap
+const map = L.map("map").setView([40.7128, -74.0060], 11);
+
+L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+  attribution: "&copy; OpenStreetMap contributors",
+  maxZoom: 19
+}).addTo(map);
+
+// Demo marker
+L.marker([40.7128, -74.0060])
+  .addTo(map)
+  .bindPopup("Transit Anomaly Detector")
+  .openPopup();

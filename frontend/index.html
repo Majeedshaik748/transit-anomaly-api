@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -46,7 +47,7 @@
               <span class="legend__item"><i class="legend__swatch legend__swatch--dot"></i>anomaly</span>
             </div>
           </div>
-          <svg id="chart" viewBox="0 0 1000 360" preserveAspectRatio="none"></svg>
+          <div id="map" style="height:400px;width:100%;border-radius:12px;"></div>
         </section>
 
         <section class="log-panel">
@@ -68,6 +69,7 @@
 
   </div>
 
-  <script src="app.js"></script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="app.js"></script>
 </body>
 </html>
